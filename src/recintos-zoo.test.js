@@ -38,7 +38,7 @@ describe("Recintos do Zoologico", () => {
       "Recinto 2 (espaço livre: 3 total: 5)"
     );
     expect(resultado.recintosViaveis[2]).toBe(
-      "Recinto 3 (espaço livre: 3 total: 7)"
+      "Recinto 3 (espaço livre: 2 total: 7)"
     );
     expect(resultado.recintosViaveis.length).toBe(3);
   });

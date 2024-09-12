@@ -58,7 +58,7 @@ class RecintosZoo {
       return { erro: "Quantidade inválida" };
     }
 
-    animalProps = animalProps.toUpperCase(); //passando nome do animal para maiuscula;
+    animalProps = animalProps.toUpperCase(); //passando nome do animal para maiuscula
 
     const animalEncontrado = listaDosAnimais.find(
       (lAnimal) => lAnimal.especie === animalProps
@@ -68,11 +68,12 @@ class RecintosZoo {
       return { erro: "Animal inválido" };
     }
 
+
     const tamanhoDoAnimal = animalEncontrado.tamanho * quantidade;
     const biomaDoAnimal = animalEncontrado.bioma;
     const tipoDoAnimal = animalEncontrado.tipo;
 
-    const biomasHabitaveis = recintos.filter((recinto) => {
+    const biomasHabitaveis = recintos.filter((recinto) => { // filtra o nome dos biomas que o animal pode habitar.
       //separa os recintos que o animal pode habitar
       const biomas = recinto.bioma.some((bioma) =>
         biomaDoAnimal.includes(bioma)
@@ -85,24 +86,32 @@ class RecintosZoo {
       return biomas;
     });
 
-    const recintosHabitaveis = biomasHabitaveis.filter((recinto) => {
-      //separa os recintos que realmente podem ser habitaveis pelo animal
+    const recintosHabitaveis = biomasHabitaveis.filter((recinto) => { //filtra só os recintos que realmente podem ser habitáveis por ele.
       const espacoLivreCalc = this.calcularEspacoLivre(recinto);
       if (espacoLivreCalc >= tamanhoDoAnimal) {
         const recintoEViavel = recinto.animaisExistentes.some((animal) => {
-          if (!animal) {
-            // se n tiver animal no recinto
-            return true;
+          if (!animal) { // verifica se n tem animal
+            if (animalEncontrado.especie != "MACACO") {
+              return true;
+            } else if (quantidade > 1) { // se for uma macaco e quantidade dele for menor que 1 ele volta false, se n true
+              return true
+            }
+            return false
           }
-          if (animal && animal.tipo === true && animal.especie == animalProps) {
-            //carnivoros
-            return true;
+          if (animal) {
+            if (animal.tipo === true && animal.especie == animalProps) {//verifica carnivoro
+              return true;
+            }
+            if (animal.tipo === tipoDoAnimal) { // verifica herbivoro
+
+              if (animalEncontrado.especie != "HIPOPOTAMO") { //verifica se o animal é um hipopotamo
+                return true;
+              } else if (recinto.bioma.includes("savana" && "rio")) { //se for, ele so adiciona só recintos que tiver animais no bioma savana e rio.  não sabia que dava pra usar E dentro de um includes descobri na cagada
+                return true
+              }
+            }
+            return false;
           }
-          if (animal && animal.tipo === tipoDoAnimal) {
-            //herbivoros
-            return true;
-          }
-          return false;
         });
         return recintoEViavel;
       }
@@ -115,8 +124,11 @@ class RecintosZoo {
 
     const falas = recintosHabitaveis.map((rec) => {
       const espacoLivreCalc = this.calcularEspacoLivre(rec); // Calcula o espaço livre
-      const espacoLivre = espacoLivreCalc - tamanhoDoAnimal;
-
+      const maisDUm = rec.animaisExistentes.some(a => {
+        if (!a?.especie) return false;
+        if (a?.especie != animalEncontrado.especie) return true;
+      })
+      const espacoLivre = espacoLivreCalc - tamanhoDoAnimal - ((maisDUm) ? 1 : 0);
       return `Recinto ${rec.id} (espaço livre: ${espacoLivre} total: ${rec.tamanhoTotal})`;
     });
 

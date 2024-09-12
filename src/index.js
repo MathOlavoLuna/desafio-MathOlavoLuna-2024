@@ -8,4 +8,5 @@
 // Por exemplo, se chegar um lote de 12 macacos, não é possível colocar 6 em 2 recintos.
 import { RecintosZoo } from "./recintos-zoo.js";
 
-console.log(new RecintosZoo().analisaRecintos("macaco", 2));
+console.log(new RecintosZoo().analisaRecintos("macaco", 1));
+

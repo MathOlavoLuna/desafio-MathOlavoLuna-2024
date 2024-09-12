@@ -6,7 +6,6 @@ export class Animais {
     this.tipo = tipo;
 
   }
-
   mostrarAnimais() {
     return ("Especie: " + this.especie + " Tamanho: " + this.tamanho + " Bioma: " + this.bioma + " Tipo: " + (this.bioma) ? "Carnivoro" : "Herbivoro");
   }
